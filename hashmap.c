@@ -16,7 +16,9 @@ struct mapNode {
 // like constructor
 void setNode(struct mapNode* node, int* key, void* value)
 {
-	node->key = key;
+	int* key2=(int*)malloc(sizeof(int));
+	key2[0]=*key;
+	node->key = &key2[0];
 	node->value = value;
 	node->next = NULL;
 	return;
@@ -140,7 +142,7 @@ void* search(struct hashMap* mp, int* key)
 	while (bucketHead != NULL) {
 		// Key is found in the hashMap
 		if (*bucketHead->key == *key) {
-			printf("returning\n");
+			//printf("returning\n");
 			return bucketHead->value;
 		}
 		bucketHead = bucketHead->next;

@@ -1,6 +1,7 @@
 // C program to insert a node in AVL tree 
 #include<stdio.h> 
 #include<stdlib.h> 
+#include<stdint.h>
 #include "avltree.h"
 // An AVL tree node 
 
@@ -224,6 +225,7 @@ struct treeNode* deleteCountNode(struct treeNode* root, void* start){
         //middle case and start case
         if(prev){
             prev->count=root->count;
+            return temp;
         }else{
             prev=root->count;
         }
@@ -258,6 +260,7 @@ struct treeNode* deleteNode(struct treeNode* root, int size, void* start)
         //if a count root exists then use deletecountnode to delete node
         if((root->count)){
             root=deleteCountNode(root,start);
+            //return root;
         }
         // node with only one child or no child
         if( (root->left == NULL) || (root->right == NULL) )
