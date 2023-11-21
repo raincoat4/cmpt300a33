@@ -53,6 +53,6 @@ int main()
  
     printf("\nPreorder traversal after deletion of 10 \n");
     preOrder(root);
- 
+    
     return 0;
 }

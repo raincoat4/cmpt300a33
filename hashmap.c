@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdint.h>
 // Linked List node
 struct mapNode {
 
@@ -104,7 +104,6 @@ void delete (struct hashMap* mp, int* key)
 	struct mapNode* currNode = mp->arr[bucketIndex];
 
 	while (currNode != NULL) {
-
 		// Key is matched at delete this
 		// node from linked list
 		if (*key == *(currNode->key)) {
@@ -119,6 +118,7 @@ void delete (struct hashMap* mp, int* key)
 				prevNode->next = currNode->next;
 			}
 			//free(currNode);
+			free(currNode->key);
 			break;
 		}
 		prevNode = currNode;
@@ -129,23 +129,28 @@ void delete (struct hashMap* mp, int* key)
 
 void* search(struct hashMap* mp, int* key)
 {
-
+	 
 	// Getting the bucket index
 	// for the given key
+	//printf("%i\n", *key);
 	//printf("%i\n", *key);
 	int bucketIndex = hashFunction(mp, key);
 	//printf("%i\n", bucketIndex);
 	// Head of the linked list
 	// present at bucket index
 	struct mapNode* bucketHead = mp->arr[bucketIndex];
+	
 	//printf("hi\n");
 	while (bucketHead != NULL) {
+		
 		// Key is found in the hashMap
-		if (*bucketHead->key == *key) {
+		//printf("new \n");
+		if (*(bucketHead->key) == *key) {
 			//printf("returning\n");
 			return bucketHead->value;
 		}
 		bucketHead = bucketHead->next;
+		printf("buckhead %i\n", *bucketHead->key);
 	}
 
 	// If no key found in the hashMap

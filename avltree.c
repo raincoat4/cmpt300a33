@@ -112,25 +112,22 @@ struct treeNode* insertTree(struct treeNode* node, int size,void* start)
     /* 1.  Perform the normal BST insertion */
     if (node == NULL) 
         return(newNode(size,start,false)); 
-  
     if (size < node->size) 
         node->left  = insertTree(node->left, size,start); 
     else if (size > node->size) 
         node->right = insertTree(node->right, size,start); 
-    else{ // Equal sizes will be placed in a liked list
+    else{ // Equal sizes will be placed in a linked list
+        printf("\t\tfound same size node\n");
+        struct treeNode* tmp = node;
         while(node->count){
             node=node->count;
         }
         node->count=newNode(size,start,false);
-        cInsert=true;
+        return tmp;
     }
     /* 2. Update height of this ancestor node */
-    if(!cInsert){
-        node->height = 1 + max(height(node->left), 
-                        height(node->right)); 
-    }
-    
-  
+    node->height = 1 + max(height(node->left), 
+                       height(node->right)); 
     /* 3. Get the balance factor of this ancestor 
           node to check whether this node became 
           unbalanced */
@@ -174,34 +171,33 @@ struct treeNode * minValueNode(struct treeNode* node)
  
     return current;
 }
- 
+
 struct treeNode* findNode(struct treeNode* root, int size, void* start){
-    if(root){
-        if(size<root->size)
-            root->left = findNode(root->left, size, start);
-        else if(size >root->size)
-            root->right = findNode(root->right, size, start);
-        else{
-            if((intptr_t)start == (intptr_t)(root->start)){
-                return root;
-            }else{
-                if(!(root->count)){
-                    
-                    return NULL;
-                }
-                while(root->count){
-                    root=root->count;
-                    if(start==(root->start)){
-                        return root;
-                    }
-                }
-                
-            }
-        }
+    if(!root){
+        printf("returning null\n");
         return NULL;
     }
-    return NULL;
-}// Recursive function to delete a node with given size
+    if(size<root->size){
+        return findNode(root->left, size, start);
+    }
+    else if(size>root->size){
+        return findNode(root->right, size, start);
+    }
+    if(start == (root->start)){
+        return root;
+    }
+    else{
+        while(root->count){
+            root=root->count;
+            if(start==(root->start)){
+                return root;
+            }
+        }
+        //printf("returning null1\n");
+        return root;
+    }   
+}
+// Recursive function to delete a node with given size
 // from subtree with given root. It returns root of
 // the modified subtree.
 
@@ -213,7 +209,7 @@ struct treeNode* deleteCountNode(struct treeNode* root, void* start){
         root=root->count;
     }
     if((root->start)!=start){
-        printf("node not found\n");
+        //printf("node not found\n");
         return false;
     }
     //if the root is at the end of the count free it
@@ -229,7 +225,7 @@ struct treeNode* deleteCountNode(struct treeNode* root, void* start){
         }else{
             prev=root->count;
         }
-        free(root);
+        //free(root);
     }
     
     return prev;
@@ -339,7 +335,7 @@ struct treeNode* bestFit(struct treeNode* root, int size){
     struct treeNode* bfn=(root);
     bfn=helperBF(root, size, bfn);
     if(((bfn->size)-size)<0){
-        printf("%d\n", ((bfn->size)));
+        //printf("%d\n", ((bfn->size)));
         return NULL;
     }{
         return bfn;
